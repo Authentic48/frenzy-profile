@@ -10,7 +10,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Test {
-  uuid String @id @default(uuid())
-  name String
+model Profile {
+  uuid         String         @id @default(uuid())
+  userUUID     String         @unique @map("user_uuid") @db.VarChar(36)
+  name         String
+  bio          String?
+  location     String?
+  age          Int?
+  height       String?
+  gender       Gender
+  interests    String[]
+  photos       String[]
+  languages    String[]
+  socialMedias SocialMedias[]
+
+  @@map("profile")
+}
+
+model SocialMedias {
+  uuid        String      @id @default(uuid())
+  name        SocialMedia
+  username    String
+  profileUUID String      @map("profile_uuid") @db.VarChar(36)
+  profile     Profile     @relation(fields: [profileUUID], references: [uuid])
+
+  @@unique([profileUUID, name])
+  @@map("social_medias")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum SocialMedia {
+  FACEBOOK
+  TWITTER
+  TIKTOK
+  INSTAGRAM
+  SNAPCHAT
 }
