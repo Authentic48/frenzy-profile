@@ -28,6 +28,7 @@
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@prisma/client": "^4.10.1",
+    "@tintok/tintok-common": "^1.0.3",
     "nestjs-rmq": "^2.8.0",
     "prisma": "^4.10.1",
     "reflect-metadata": "^0.1.13",
