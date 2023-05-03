@@ -1,4 +1,4 @@
-import { Gender, SocialMedias } from '@prisma/client';
+import { Gender, SocialMedia } from '@prisma/client';
 
 export interface ICreateProfile {
   userUUID: string;
@@ -14,8 +14,23 @@ export interface ICreateProfile {
   languages: string[];
 }
 
+export interface IUpdateProfile {
+  userUUID: string;
+  name: string;
+  bio: string;
+  location: string;
+  age: number;
+  height: string;
+  gender: Gender;
+  interests: string[];
+  photos: string[];
+  languages: string[];
+
+  socialMedias: ISocialMedia[];
+}
+
 export interface ISocialMedia {
-  name: SocialMedias;
+  name: SocialMedia;
 
   username: string;
 }
