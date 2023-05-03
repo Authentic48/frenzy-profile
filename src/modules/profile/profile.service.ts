@@ -4,6 +4,7 @@ import { IProfile } from './profile';
 import {
   ICreateProfile,
   IGetProfile,
+  IGetProfiles,
   IUpdateProfile,
 } from '../../libs/interfaces/profile.interface';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
@@ -17,6 +18,47 @@ import { ProfileAlreadyExistException } from '../../libs/exceptions/already-exis
 export class ProfileService implements IProfile {
   private readonly logger: Logger = new Logger(ProfileService.name);
   constructor(private readonly prisma: PrismaService) {}
+
+  async getProfiles(userUUID: string): Promise<IGetProfiles[]> {
+    const profile = await this.prisma.profile.findUniqueOrThrow({
+      where: { userUUID },
+      select: {
+        interests: true,
+        location: true,
+        gender: true,
+        age: true,
+        languages: true,
+      },
+    });
+    // TODO: Improve filter
+    return this.prisma.profile.findMany({
+      where: {
+        userUUID: {
+          not: userUUID,
+        },
+        interests: {
+          hasSome: profile.interests,
+        },
+        languages: {
+          hasSome: profile.languages,
+        },
+        gender: {
+          not: profile.gender,
+        },
+        age: {
+          lte: profile.age,
+        },
+      },
+      select: {
+        uuid: true,
+        name: true,
+        bio: true,
+        age: true,
+        photos: true,
+        location: true,
+      },
+    });
+  }
 
   async create(data: ICreateProfile): Promise<{ isSuccessFul: boolean }> {
     try {

@@ -1,6 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { ProfileService } from './profile.service';
-import { IGetProfile } from '../../libs/interfaces/profile.interface';
+import {
+  IGetProfile,
+  IGetProfiles,
+} from '../../libs/interfaces/profile.interface';
 import { RMQRoute } from 'nestjs-rmq';
 import { EProfileRouteTopics } from '@tintok/tintok-common';
 
@@ -17,5 +20,10 @@ export class ProfileQuery {
     uuid: string;
   }): Promise<IGetProfile> {
     return this.profileService.getProfileByUserUUID(userUUID, uuid);
+  }
+
+  @RMQRoute(EProfileRouteTopics.GET_PROFILES)
+  async getProfiles(userUUID: string): Promise<IGetProfiles[]> {
+    return this.profileService.getProfiles(userUUID);
   }
 }

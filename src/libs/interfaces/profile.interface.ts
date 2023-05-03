@@ -47,3 +47,11 @@ export interface IGetProfile {
   photos: string[];
   languages: string[];
 }
+
+export interface IGetProfiles {
+  uuid: string;
+  name: string;
+  location: string;
+  age: number;
+  photos: string[];
+}
